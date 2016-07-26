@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1.0, maximum-scale=1, user-scalable=no,minimal-ui">
+<style>
+	*{margin:0;paddign:0;}
+	#svg_1 {
+		  stroke-dasharray:1500;
+		  stroke-dashoffset: 1500;
+		  -webkit-animation: dash 5s linear infinite;
+		  animation: dash 5s linear infinite;
+		}
+	ellipse{
+		 stroke-dasharray: 800;
+		  stroke-dashoffset: 800;
+		  -webkit-animation: dash 6s linear infinite;
+		  animation: dash 6s linear infinite;
+	}
+	#svg_3{
+		 stroke-dasharray:0;
+	     stroke-dashoffset:0;
+	}
+@-webkit-keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+</style>
+<script type="text/javascript" src="iscroll-probe.js"></script>
+<body  onload="loaded()">
+	<div style="width:100%;height:600px;overflow:hidden" id="wrapper">
+		<svg id="svg" xmlns="http://www.w3.org/2000/svg" version="1.1" height=1900  style="display:block;margin:0 auto;">
+			<path id="svg_3" d="m10,10l198,198l-198,198"   fill-opacity="null"  stroke-opacity="null"  stroke-width="1" stroke="#666" fill="none" ></path>
+		</svg>
+	</div>
+</body>
+	<script>
+		var myScroll
+		var pathTotal,pathSingle;
+		var winWidth=window.innerWidth;
+		var svg=document.getElementById("svg");
+		var svg3=document.getElementById("svg_3");
+		
+		var pathTotal=Math.sqrt(198*198+198*198);
+		
+		
+		win=window.innerHeight/2
+
+		//svg3.style["stroke-dashoffset"]=2921-window.innerHeight/2;
+		//svg3.style["stroke-dasharray"]=pathTotal;
+		//svg3.style["stroke-dashoffset"]=pathTotal;
+		
+
+		
+		function loaded () {
+			/*fixViewport();
+			svg3.setAttribute("d",initd(290,300,7));
+			console.log(Math.sqrt(290*290+300*300));
+			position = document.getElementById('position');
+
+			myScroll = new IScroll('#wrapper', { probeType: 3, mouseWheel: true });
+
+			myScroll.on('scroll', updatePosition);
+			myScroll.on('scrollEnd', updatePosition);*/
+		}
+
+		document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);		
+		// 强制浏览器以指定宽度渲染
+		function fixViewport() {
+		  // alert(navigator.userAgent);
+		  // alert(isiPhone());
+		  // return;
+		  var metas = document.getElementsByTagName('meta');
+		  if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i))) {
+			for (i=0; i<metas.length; i++) {
+			  if (metas[i].name == "viewport") {metas[i].content = "width=320, user-scalable=no";}
+			}
+		  }
+		  if (navigator.userAgent.match(/android/i)) {
+			for (i=0; i<metas.length; i++) {
+			  if (metas[i].name == "viewport") {metas[i].content = "width=320, user-scalable=no";}  //for galaxy s4 & google nexus
+			}
+		  }
+		}
+	</script>
+</html>	

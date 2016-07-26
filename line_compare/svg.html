@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1.0, maximum-scale=1, user-scalable=no,minimal-ui">
+	<title></title>
+	<style>
+		*{margin:0;padding:0;}
+		.divDis{padding:15px;color:white;font-weight:bold;position:absolute;opacity:0; background:#F011EE}
+		img{position:absolute;top:0;left:0;z-index:9999;}
+		canvas{background:#67758B}
+	</style>
+</head>
+<body style="height: 100%;">
+	<canvas id="myCanvas"  >
+	Your browser does not support the canvas element.
+	</canvas>
+	<img id="point" src="point.png" width="10px" height="10px" />
+</body>
+<script type="text/javascript">
+
+	var div=document.getElementById("myCanvas");
+	var point=document.getElementById("point");
+	var divDis=document.getElementsByClassName("divDis");
+	
+	div.width=window.innerWidth;
+	div.height=window.innerHeight*3;
+	var cxt=div.getContext("2d");
+	
+	var w=window.innerWidth/2;
+	x=50;
+	var y=parseInt(window.innerHeight/2);
+	var xd=1;
+	var sc=0;
+	cxt.moveTo(x,y);
+	point.style.left=x-5+"px";
+	point.style.top=y-5+"px";
+	var index=0;
+	
+	div.addEventListener("touchmove",function(e){
+			drawLine();
+	});
+	function drawLine(){
+		var scrollY=window.scrollY;
+		
+		var changeY=scrollY-sc;
+		if(changeY>0)
+		{		
+			for(var i=0;i<changeY;i++)
+			{
+				var ny=y+1;
+				if(xd)
+				{
+					x+=2;
+					if(x>=window.innerWidth-50)
+					{
+						x=window.innerWidth-50;
+						xd=0;
+						index++;
+						createDiv(x-50+"px",ny+"px");
+						
+					}
+				}
+				else
+				{
+					x-=2;
+					if(x<=50)
+					{
+						x=50;
+						xd=1;
+						index++;
+						createDiv(x+"px",ny+"px");
+					}
+				}
+				if(divDis&&divDis.length>0&&index>0)
+				{
+					var opacity=divDis[index-1].style["opacity"]||getComputedStyle(divDis[index-1])["opacity"];
+					console.log(opacity);
+					divDis[index-1].style["opacity"]=(parseFloat(opacity)+0.005);
+					//console.log(divDis.length);
+				}
+				
+				point.style.left=x-5+"px";
+				point.style.top=ny-5+"px";
+				cxt.strokeStyle="white";
+				cxt.lineTo(x,ny);
+				cxt.stroke();
+				sc=scrollY;
+				y=ny;
+			}
+		}
+	}
+	function createDiv(left,top){
+		var div=document.createElement("div");
+		div.className="divDis";
+		div.innerHTML="这是第"+index+"个容器";
+		div.style.left=left;
+		div.style.top=top;
+		document.body.appendChild(div);
+	}
+	/*div.addEventListener("touchstart",function(e){
+		this.isStart=1;
+		var x=e.changedTouches[0].pageX;
+		var y=e.changedTouches[0].pageY;
+		cxt.moveTo(x,y);
+		
+	});
+	div.addEventListener("touchmove",function(e){
+		if(this.isStart)
+		{
+			var x=e.changedTouches[0].pageX;
+			var y=e.changedTouches[0].pageY;
+			//cxt.lineTo(x,y);
+			//cxt.stroke();
+			//console.log(this.scrollTop);
+		}
+	});
+	div.addEventListener("touchend",function(e){
+		this.isStart=0;
+	});*/
+</script>
+</html>

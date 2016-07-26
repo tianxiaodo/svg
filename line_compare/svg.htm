@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1.0, maximum-scale=1, user-scalable=no,minimal-ui">
+<style>
+	*{margin:0;paddign:0;}
+	#svg_1 {
+		  stroke-dasharray:1500;
+		  stroke-dashoffset: 1500;
+		  animation: dash 5s linear infinite;
+		}
+	ellipse{
+		 stroke-dasharray: 800;
+		  stroke-dashoffset: 800;
+		  animation: dash 6s linear infinite;
+	}
+	#svg_3{
+		 stroke-dasharray:0;
+	     stroke-dashoffset:0;
+	}
+	@keyframes dash {
+	  to {
+		stroke-dashoffset: 0;
+	  }
+	}
+</style>
+<script type="text/javascript" src="iscroll-probe.js"></script>
+<body  onload="loaded()">
+	<input type="email" style="position:fixed;right:5px;width:100px;height:30px;line-height:30px;z-index:99999"/>
+	<input type="address" style="position:fixed;left:5px;width:100px;height:30px;line-height:30px;z-index:99999"/>
+	<input type="tel" name="tel" style="position:fixed;right:5px;top:80px;width:100px;height:30px;line-height:30px;z-index:99999" value="" placeholder="请输入电话号码">
+	<div style="width:100%;height:600px;overflow:hidden" id="wrapper">
+		<svg id="svg" xmlns="http://www.w3.org/2000/svg" version="1.1" height=1900  style="display:block;margin:0 auto;">
+			<path id="svg_1" d="m10,10 l0,100 l0,-110 l110,0 l0,110 l0,-110 l-110,0 l0,55 l110,0 l0,-55 l-55,0 l0,110 l0,-55 l-55,0 l0,55 l110,0" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" stroke="#000" fill="none"/>
+			<ellipse ry="62" rx="82.5" id="svg_2" cy="117" cx="212.5" opacity="0.5" stroke-width="1.5" stroke="#000" fill="#fff"/>
+			<path id="svg_3"   fill-opacity="null"  stroke-opacity="null" stroke-width="1" stroke="#000" fill="none" ></path>
+		</svg>
+	</div>
+	<div id="zz"></div>
+	<div id="notice" style="width:100px;height:100px;position:fixed;top:30px;border:1px solid #666;">0</div>
+</body>
+	<script>
+		var myScroll
+		
+		var pathTotal,pathSingle;
+		//var x=document.getElementsByTagName("path")[1];
+		var winWidth=window.innerWidth;
+		var svg=document.getElementById("svg");
+		var notice=document.getElementById("notice");
+		
+		var svg3=document.getElementById("svg_3");
+		svg.setAttribute("width",winWidth);
+		
+		svg.style.width=winWidth;
+		
+		
+		win=window.innerHeight/2
+		function initd(xc,yc,times){
+			pathSingle=Math.sqrt(yc*yc+xc*xc)
+			pathTotal=pathSingle*times;
+			
+			svg.setAttribute("height",yc*(times+1)+win+100);
+			svg3.style["stroke-dasharray"]=pathTotal;
+			svg3.style["stroke-dashoffset"]=pathTotal;
+			var d="m0,"+win;
+			n=0;
+			for(var i=1;i<times+1;i++)
+			{
+				nxc=i%2==0?-1*xc:xc;
+				d+=" l"+nxc+","+yc;
+			}
+			return d;
+		}
+					
+		function updatePosition () {
+			
+			notice.innerHTML=this.y;
+			if(this.y<0&&this.y>-1500){
+				console.log(pathTotal+"-"+(pathSingle/300)+"*"+this.y);
+				var dashoffset=pathTotal+this.y*(pathSingle/300);
+				svg3.style["stroke-dashoffset"]=dashoffset;
+				console.log(svg3.getBoundingClientRect())
+			}
+			else if(this.y>=0)
+			{
+				svg3.style["stroke-dashoffset"]=pathTotal;
+			}
+			else{
+				svg3.style["stroke-dashoffset"]=0;
+			}
+		}
+		
+		function loaded () {
+			fixViewport();
+			svg3.setAttribute("d",initd(320,300,5));
+			console.log(Math.sqrt(320*320+300*300));
+			position = document.getElementById('position');
+
+			myScroll = new IScroll('#wrapper', { probeType: 3, mouseWheel: true });
+
+			myScroll.on('scroll', updatePosition);
+			myScroll.on('scrollEnd', updatePosition);
+		}
+
+		document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+		
+		
+		
+		// 强制浏览器以指定宽度渲染
+		function fixViewport() {
+		  // alert(navigator.userAgent);
+		  // alert(isiPhone());
+		  // return;
+		  var metas = document.getElementsByTagName('meta');
+		  if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i))) {
+			for (i=0; i<metas.length; i++) {
+			  if (metas[i].name == "viewport") {metas[i].content = "width=320, user-scalable=no";}
+			}
+		  }
+		  if (navigator.userAgent.match(/android/i)) {
+			for (i=0; i<metas.length; i++) {
+			  if (metas[i].name == "viewport") {metas[i].content = "width=320, user-scalable=no";}  //for galaxy s4 & google nexus
+			}
+		  }
+		}
+		
+		
+		function jt(head,foot)
+		{	
+			console.log(head+":"+foot);
+			if(head*4==foot)
+			{
+				console.log(head);
+			}
+			else{
+				jt(head-1,foot-2);
+			}
+		}
+		jt(17,42);
+		
+		
+		function speed()
+		{
+			var y=0;//卡车行驶距离
+			var b=true;
+			while(b)
+			{
+				var ms=1.5*y-2000;
+				var totals=ms+y;
+				mspeed=ms/1.5;
+				carspeed=y/1.5;
+				
+				if(totals/2+9000==y||totals/2-9000==y)
+				{
+					console.log("卡车形式距离："+y+".摩托行驶距离："+ms);
+					b=false;
+				}
+				if(y>=10000000)
+				{
+					b=false;
+					console.log("no");
+				}
+				y++;
+			}
+		}
+		speed();
+	</script>
+</html>	

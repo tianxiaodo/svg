@@ -1,0 +1,148 @@
+<html>
+    <head>
+        <title></title>
+    </head>
+	
+
+    <body>
+        <svg id="p1" width="325px" height="325px" style='margin:45px;'>
+         <!-- <path id='p1' d="M0 45
+        A 45 45, 10, 0, 0, 45 90
+        L 45 45 Z" fill="green"/> -->
+       
+        
+        
+        <!-- <path d="M0 45
+        A 45 45, 0, 1, 1, 45 90
+        L 45 45 Z" fill="blue"/> -->
+        </svg>
+    </body>
+    <script>
+
+
+    var d={
+            code:0,
+            msg:"",
+            data:[
+             {
+                question: {
+                  right: 5,
+                  wrong: 0.5,
+                  half: 2,
+                  none: 2.5,
+                  percent: 80
+                },
+                info: [
+                  {
+                    "question_id": 3123132,
+                    "question_name": "选择题",
+                    "status": 1
+                  },
+                  {
+                    "question_id": 31233132,
+                    "question_name": "复合题",
+                    "status": 1,
+                    "children": [
+                    ]
+                  },
+                  {
+                    "question_id": 3123132,
+                    "question_name": "选择题",
+                    "status": 2
+                  },
+                  {
+                    "question_id": 3123132,
+                    "question_name": "选择题",
+                    "status": 2
+                  }
+                ]
+              }
+            ]
+        }
+        var color=[{s:"#74d2fc",e:"#607afd"},{s:"#ff959a",e:"#ef2029"},{s:"#fee5a9",e:"#fdc93d"},{s:"#c5d2f8",e:"909bb2"}];
+        var question=d.data[0].question;
+		var data=[question.right,question.wrong,question.half,question.none];
+    	
+
+    	var circle={
+    		data:[50,260,50,10],
+    		color:["#607afd","#ef2029","#fdc93d","#c5d2f8"]
+    	}
+
+    	
+
+
+		function drawCircle(circle){
+
+			function getD(h){
+				return 2*Math.PI/360*h.toFixed(5);
+			}
+		
+			function getH(x0,y0,x1,y1,a){
+				var o= {
+					x:x0+(x1-x0)*Math.cos(getD(a))-(y1-y0)*Math.sin(getD(a)),
+					y:y0+(x1-x0)*Math.sin(getD(a))-(y1-y0)*Math.cos(getD(a))
+				}
+				o={
+					x:o.x.toFixed(5),
+					y:o.y.toFixed(5)
+				}
+				console.log(o.x,',',o.y);
+				return o;
+			}
+
+			function getRotateSum(arr,i){
+				if(i=0){
+					return 0
+				}
+				else{
+					return eval(arr.slice(0,i).join("+"));
+				}
+			}
+
+			//var data=circle.data;
+			//color=circle.color;
+			
+			var sum=eval(data.join("+"));
+			var a=0;
+			var r=100;
+			var center={
+				x:150,
+				y:150
+			};
+			var ranA=[];
+			var start,end,dStr,str="";
+
+
+			for(var i=0;i<data.length;i++){
+
+				a=data[i] / sum * 360;
+				ranA.push(a);
+				start={
+					x:250,
+					y:150
+				};
+				end=getH(center.x,center.y,start.x,start.y,a);
+
+				var rotate=i&&eval(ranA.slice(0,i).join("+"));
+
+				dStr="M "+start.x+" "+start.y+" A "+r+" "+r+",0,"+(a>180?1:0)+",1,"+end.x+" "+end.y+" L "+center.x+" "+ center.y+" Z";
+				str+="<path  d='"+dStr+"' fill='"+color[i].e+"' style='transform: rotate("+rotate+"deg);transform-origin:"+center.x+"px "+center.y+"px;'/>";
+			}
+			// a=360*0.2;
+			// ranA.push(a);
+			// start=end||{
+			// 	x:65.45084971874736,
+			// 	y:2.447174185242318
+			// };
+			// end=getH(center.x,center.y,start.x,start.y,a);
+			// dStr="M "+start.x+" "+start.y+" A "+center.x+" "+center.y+",0,"+(a>180?1:0)+",1,"+end.x+" "+end.y+" L "+center.x+" "+ center.y+" Z";
+			// str+="<path  d='"+dStr+"' fill='green'/>"
+
+			str+="<circle cx='"+center.x+"' cy='"+center.y+"' r='50' stroke='black' stroke-width='0' fill='#e5ecf9'/>";
+
+			document.getElementById("p1").innerHTML=str;
+		}
+		drawCircle(circle);
+	</script>
+</html>
